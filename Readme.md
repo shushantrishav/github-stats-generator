@@ -114,3 +114,4 @@ You can easily embed the generated SVG into your GitHub profile README, reposito
 
 ```markdown
 ![GitHub Stats](http://localhost:8000/stats/your-github-username/svg)
+```
