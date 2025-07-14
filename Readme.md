@@ -21,6 +21,9 @@ A FastAPI application that fetches, aggregates, and caches comprehensive GitHub 
 * **python-dotenv**: Loads environment variables from a `.env` file.
 * **Docker**: For containerization and easy deployment.
 
+## 🖥️ Preview
+![svg](https://github-stats-generator.onrender.com/stats/shushantrishav/svg)
+
 ## 🛠️ Setup and Installation
 
 Follow these steps to get your project up and running locally.
