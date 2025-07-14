@@ -33,7 +33,7 @@ class GitHubSVGUtil:
         # Extract data
         username = stats.get("username", "Unknown User")
         user_name = username.replace("-", " ").title()
-        total_stars = f"{stats.get('total_stars', 0):,}"
+        total_stars = f"{stats.get('total_stars', 0):,}34"
         total_commits = f"{stats.get('total_commits', 0):,}"
         total_prs = stats.get("total_prs", 0)
         total_issues = stats.get("total_issues", 0)
