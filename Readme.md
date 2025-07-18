@@ -22,7 +22,7 @@ A FastAPI application that fetches, aggregates, and caches comprehensive GitHub 
 * **Docker**: For containerization and easy deployment.
 
 ## 🖥️ Preview
-![svg](https://github-stats-generator.onrender.com/stats/shushantrishav/svg/)
+![svg](https://github-stats-generator.onrender.com/stats/shushantrishav/svg?v2)
 
 ## 🛠️ Setup and Installation
 
