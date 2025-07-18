@@ -6,15 +6,15 @@
 
   <g transform="translate(30, 120)">
     <text x="0" y="0" font-family="Segoe UI, sans-serif" font-size="18" font-weight="600" fill="#939393">⭐ Total Stars:</text>
-    <text x="200" y="0" font-family="Segoe UI, sans-serif" font-size="18" font-weight="600" fill="#939393">{{ total_stars }}</text>
-    <text x="0" y="40" font-family="Segoe UI, sans-serif" font-size="18" font-weight="600" fill="#939393">⌚ Total Commits(2025) :</text>
-    <text x="200" y="40" font-family="Segoe UI, sans-serif" font-size="18"  font-weight="600" fill="#939393">{{ total_commits }}</text>
+    <text x="220" y="0" font-family="Segoe UI, sans-serif" font-size="18" font-weight="600" fill="#939393">  {{ total_stars }}</text>
+    <text x="0" y="40" font-family="Segoe UI, sans-serif" font-size="18" font-weight="600" fill="#939393">⌚ Total Commits(2025):</text>
+    <text x="220" y="40" font-family="Segoe UI, sans-serif" font-size="18"  font-weight="600" fill="#939393">   {{ total_commits }}</text>
     <text x="0" y="80" font-family="Segoe UI, sans-serif" font-size="18" font-weight="600" fill="#939393">🔗 Total PRs:</text>
-    <text x="200" y="80" font-family="Segoe UI, sans-serif" font-size="18" font-weight="600" fill="#939393">{{ total_prs }}</text>
+    <text x="220" y="80" font-family="Segoe UI, sans-serif" font-size="18" font-weight="600" fill="#939393">  {{ total_prs }}</text>
     <text x="0" y="120" font-family="Segoe UI, sans-serif" font-size="18" font-weight="600" fill="#939393">🚩 Total Issues:</text>
-    <text x="200" y="120" font-family="Segoe UI, sans-serif" font-size="18" font-weight="600" fill="#939393">{{ total_issues }}</text>
+    <text x="220" y="120" font-family="Segoe UI, sans-serif" font-size="18" font-weight="600" fill="#939393">  {{ total_issues }}</text>
     <text x="0" y="160" font-family="Segoe UI, sans-serif" font-size="18" font-weight="600" fill="#939393">💻 Contributed to:</text>
-    <text x="200" y="160" font-family="Segoe UI, sans-serif" font-size="18" font-weight="600" fill="#939393">{{ contributed_repos }}</text>
+    <text x="220" y="160" font-family="Segoe UI, sans-serif" font-size="18" font-weight="600" fill="#939393">  {{ contributed_repos }}</text>
   </g>
 
   <circle cx="440" cy="180" r="70" stroke="#FF5722" stroke-width="12" fill="none"/>
