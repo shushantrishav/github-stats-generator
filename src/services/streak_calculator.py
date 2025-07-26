@@ -1,7 +1,7 @@
 # src/services/streak_calculator.py
 from datetime import datetime, timedelta
 from collections import namedtuple
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Optional
 
 class StreakCalculator:
     """
@@ -22,7 +22,7 @@ class StreakCalculator:
         Returns:
             Dict[str, Any]: A dictionary containing 'longest_streak' and 'current_streak',
                             each being a dictionary with 'start_date', 'end_date', and 'length',
-                            or None if no streak exists.
+                            or a default dictionary for current_streak if none.
         """
         days_processed = []
         for day in contribution_days:
@@ -41,120 +41,117 @@ class StreakCalculator:
         longest_streak_obj = self._calculate_longest_streak(days_processed)
         current_streak_obj = self._calculate_current_streak(days_processed)
 
-        return {
-            "longest_streak": longest_streak_obj, # Removed ._asdict() as it's already a dict or None
-            "current_streak": current_streak_obj  # Removed ._asdict() as it's already a dict or None
+        # Convert namedtuple to dictionary for Pydantic compatibility
+        # If current_streak_obj is None, provide default values as requested
+        today = datetime.today().date()
+        current_streak_output = current_streak_obj._asdict() if current_streak_obj else {
+            "start_date": today,
+            "end_date": today,
+            "length": 0
         }
 
-    def _calculate_longest_streak(self, days_processed: List[Dict[str, Any]]) -> Dict[str, Any] | None:
+        return {
+            "longest_streak": longest_streak_obj._asdict() if longest_streak_obj else None,
+            "current_streak": current_streak_output
+        }
+
+    def _calculate_longest_streak(self, days: List[Dict[str, Any]]) -> Optional[Any]:
         """
-        Calculates the longest contribution streak.
+        Calculates the longest streak of consecutive contribution days.
         """
-        if not days_processed:
+        if not days:
             return None
 
-        max_streak = 0
-        current_streak = 0
+        longest_length = 0
         longest_start_date = None
         longest_end_date = None
+
+        current_length = 0
         current_start_date = None
 
-        for i, day_data in enumerate(days_processed):
-            day_date = day_data['date']
-            day_count = day_data['count']
-
-            if day_count > 0:
-                if current_streak == 0:
-                    current_start_date = day_date
-                    current_streak = 1
-                elif day_date == days_processed[i-1]['date'] + timedelta(days=1):
-                    current_streak += 1
-                else: # Gap in streak
-                    current_start_date = day_date
-                    current_streak = 1
-            else: # Day has 0 contributions
-                if current_streak > max_streak:
-                    max_streak = current_streak
+        for i in range(len(days)):
+            if days[i]['count'] > 0:
+                if current_length == 0:
+                    current_start_date = days[i]['date']
+                current_length += 1
+            else:
+                if current_length > longest_length:
+                    longest_length = current_length
                     longest_start_date = current_start_date
-                    longest_end_date = days_processed[i-1]['date'] # Previous day was end of streak
-                current_streak = 0
+                    longest_end_date = days[i-1]['date'] if i > 0 else current_start_date
+                current_length = 0
                 current_start_date = None
 
-        # After loop, check if the last streak was the longest
-        if current_streak > max_streak:
-            max_streak = current_streak
+        # Check after loop for the last streak
+        if current_length > longest_length:
+            longest_length = current_length
             longest_start_date = current_start_date
-            longest_end_date = days_processed[-1]['date']
+            longest_end_date = days[-1]['date']
 
-        longest_streak_obj = None
-        if max_streak > 0 and longest_start_date and longest_end_date:
-            longest_streak_obj = self.Streak(longest_start_date, longest_end_date, max_streak)
-        
-        return longest_streak_obj._asdict() if longest_streak_obj else None
+        if longest_length > 0:
+            return self.Streak(
+                start_date=longest_start_date,
+                end_date=longest_end_date,
+                length=longest_length
+            )
+        return None
 
-
-    def _calculate_current_streak(self, days_processed: List[Dict[str, Any]]) -> Dict[str, Any] | None:
+    def _calculate_current_streak(self, days: List[Dict[str, Any]]) -> Optional[Any]:
         """
-        Calculates the current contribution streak ending today or yesterday.
-        Considers contributions up to the most recent day.
+        Calculates the current consecutive streak of contribution days ending today or yesterday.
+        Returns a Streak namedtuple or None if no streak is found.
         """
-        if not days_processed:
+        if not days:
             return None
 
         today = datetime.now().date()
-        current_streak_length = 0
-        current_streak_start_date = None
-        current_streak_end_date = None # Initialize end date
+        yesterday = today - timedelta(days=1)
 
-        # Filter days to include only those up to today (or yesterday if today has no contribution)
-        recent_days = [d for d in days_processed if d['date'] <= today]
-        recent_days.sort(key=lambda x: x['date'], reverse=True) # Process from most recent backward
+        # Filter days to include only up to today/yesterday for current streak calculation
+        relevant_days = [d for d in days if d['date'] <= today]
+        relevant_days.sort(key=lambda x: x['date'], reverse=True) # Process from most recent
 
-        current_day_ptr = 0
+        current_length = 0
+        current_end_date = None
+        current_start_date = None
         
-        while current_day_ptr < len(recent_days):
-            day_data = recent_days[current_day_ptr]
+        expected_date = today
+
+        for day_data in relevant_days:
             day_date = day_data['date']
+            day_count = day_data['count']
 
-            # Check for current day contribution or yesterday's if today has none
-            if current_streak_length == 0:
-                # If today has contributions
-                if day_date == today and day_data['count'] > 0:
-                    current_streak_length = 1
-                    current_streak_start_date = day_date
-                    current_streak_end_date = day_date
-                # If yesterday has contributions and today doesn't (or it's the first check and today has no activity)
-                elif day_date == today - timedelta(days=1) and day_data['count'] > 0 and (today not in [d['date'] for d in recent_days if d['count'] > 0]):
-                    current_streak_length = 1
-                    current_streak_start_date = day_date
-                    current_streak_end_date = day_date
-                elif day_date < today - timedelta(days=1): # We've gone too far back without finding a recent contribution
+            if day_date == expected_date:
+                if day_count > 0:
+                    if current_length == 0:
+                        current_end_date = day_date
+                    current_length += 1
+                    current_start_date = day_date # Update start date as we go backward
+                    expected_date -= timedelta(days=1)
+                else:
+                    # Contribution count is 0 for an expected day, streak breaks
                     break
-            else: # We are already in a streak, check if the previous day was consecutive
-                is_consecutive = False
-                if current_streak_start_date:
-                    # For the first day after identifying the streak start, check if it's today or yesterday
-                    if current_streak_length == 1: # This is the first day of the potential streak
-                        if (day_date == today or day_date == today - timedelta(days=1)) and day_data['count'] > 0:
-                            is_consecutive = True
-                            current_streak_end_date = day_date # Set end date to the most recent contribution day
-                    else: # Subsequent days in the streak must be exactly one day before the previous
-                        if day_date == current_streak_start_date - timedelta(days=1) and day_data['count'] > 0:
-                            is_consecutive = True
-                    
-                    if is_consecutive:
-                        current_streak_length += 1
-                        current_streak_start_date = day_date # Update start date as we go backward
-                    elif current_streak_length > 0: # Streak broken, or no more consecutive days
-                        break
-                    elif day_date < today - timedelta(days=1) and day_data['count'] == 0:
-                        # If we've passed yesterday and there was no contribution, there's no current streak
-                        break
-                    
-                    current_day_ptr += 1
+            elif day_date < expected_date:
+                # We've skipped a day with 0 contributions, so the streak is broken
+                if expected_date == today and day_date == yesterday and day_count > 0:
+                    # Edge case: today has no contribution, but yesterday does,
+                    # and we are looking for a streak ending yesterday.
+                    if current_length == 0:
+                        current_end_date = day_date
+                    current_length += 1
+                    current_start_date = day_date
+                    expected_date -= timedelta(days=1)
+                else:
+                    # If we found an older date with a gap, the streak is broken.
+                    break
+            else:
+                # day_date > expected_date, this shouldn't happen with sorted and filtered data
+                continue
 
-        current_streak_obj = None
-        if current_streak_length > 0 and current_streak_start_date and current_streak_end_date:
-            current_streak_obj = self.Streak(current_streak_start_date, current_streak_end_date, current_streak_length)
-
-        return current_streak_obj._asdict() if current_streak_obj else None
+        if current_length > 0 and current_end_date:
+            return self.Streak(
+                start_date=current_start_date,
+                end_date=current_end_date,
+                length=current_length
+            )
+        return None
