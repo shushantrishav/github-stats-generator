@@ -1,10 +1,10 @@
-<svg width="600" height="650" viewBox="0 0 600 650" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg width="620" height="650" viewBox="0 0 610 650" fill="none" xmlns="http://www.w3.org/2000/svg">
 
-  <rect x="0" y="0" width="600" height="650" rx="12" fill="#1C1C1E00"/>
+  <rect x="0" y="0" width="620" height="650" rx="12" fill="rgba(28, 28, 30, 1)"/>
 
   <text x="30" y="70" font-family="Segoe UI, sans-serif" font-weight="bold" font-size="36" fill="#FF5722">{{ user_name }}</text>
 
-  <g transform="translate(30, 120)">
+  <g transform="translate(20, 120)">
     <text x="0" y="0" font-family="Segoe UI, sans-serif" font-size="18" font-weight="600" fill="#939393">⭐ Total Stars:</text>
     <text x="220" y="0" font-family="Segoe UI, sans-serif" font-size="18" font-weight="600" fill="#939393">  {{ total_stars }}</text>
     <text x="0" y="40" font-family="Segoe UI, sans-serif" font-size="18" font-weight="600" fill="#939393">⌚ Total Commits(2025):</text>
@@ -20,7 +20,7 @@
   <circle cx="440" cy="180" r="70" stroke="#FF5722" stroke-width="12" fill="none"/>
   <text x="440" y="188" font-family="Segoe UI, sans-serif" font-weight="bold" font-size="70" text-anchor="middle" dominant-baseline="middle" fill="#FF5722">{{ user_rating }}</text>
 
-  <g transform="translate(30, 350)">
+  <g transform="translate(20, 350)">
     <text x="90" y="0" font-family="Segoe UI, sans-serif" font-size="32" font-weight="bold" fill="#FF5722" text-anchor="middle">{{ total_contributions }}</text>
     <text x="90" y="40" font-family="Segoe UI, sans-serif" font-size="18" font-weight="BOLD" fill="#939393" text-anchor="middle">Total Contributions</text>
     <text x="90" y="70" font-family="Segoe UI, sans-serif" font-size="14" font-weight="600" fill="#A0A0A0" text-anchor="middle">{{ contribution_period }}</text>
@@ -38,7 +38,7 @@
     <text x="90" y="70" font-family="Segoe UI, sans-serif" font-size="14" font-weight="600" fill="#A0A0A0" text-anchor="middle">{{ longest_streak_dates }}</text>
   </g>
 
-<g transform="translate(30, 480)">
+<g transform="translate(20, 480)">
     <text x="0" y="0" font-family="Segoe UI, sans-serif" font-size="30" font-weight="BOLD" fill="#FF5722">Most Used Language</text>
 
     <rect x="0" y="40" width="540" height="8" rx="4" fill="#ff5622a3"/>

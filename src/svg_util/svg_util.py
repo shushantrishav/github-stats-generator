@@ -6,10 +6,10 @@ from src.utils.logger import get_logger # Import the new logger utility
 logger = get_logger(__name__) # Initialize logger for this module
 
 # Constants
-SVG_WIDTH = 550
+SVG_WIDTH = 570
 MAX_LANGUAGES = 6
-LANG_BAR_COLORS = ["#FF5F1F", "#FFA500", "#F4BB44", "#FFD580", "#FFDEAD", "#FBCEB1"]
-LANG_TEXT_X = [10, 150, 270, 350, 440]
+LANG_BAR_COLORS = ["#FF5F1F", "#FFA500", "#F4BB44", "#FFD580", "#FFDEAD", "#FBCEB1", "#FBD5BC"]
+LANG_TEXT_X = [5, 135, 245, 330, 400, 480]
 
 class GitHubSVGUtil:
     def load_stats_from_json(json_path):
